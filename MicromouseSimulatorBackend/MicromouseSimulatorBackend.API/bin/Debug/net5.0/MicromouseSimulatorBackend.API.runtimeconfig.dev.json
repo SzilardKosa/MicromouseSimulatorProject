@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\Szilard\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\Szilard\\.nuget\\packages"
+    ]
+  }
+}
