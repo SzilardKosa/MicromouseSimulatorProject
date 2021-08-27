@@ -35,6 +35,7 @@ namespace MicromouseSimulatorBackend.BLL.Services
             {
                 throw new DocumentDoesntExistsException();
             }
+            document.Id = id;
             _repository.ReplaceOne(id, document);
         }
 

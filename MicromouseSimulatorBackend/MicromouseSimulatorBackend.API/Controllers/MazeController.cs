@@ -32,9 +32,7 @@ namespace MicromouseSimulatorBackend.API.Controllers
             var result = _service.FindById(id);
 
             if (result == null)
-            {
                 return NotFound();
-            }
 
             return Ok(new MazeDTO(result));
         }
@@ -45,9 +43,10 @@ namespace MicromouseSimulatorBackend.API.Controllers
         {
             // Handle error if no data is sent.
             if (mazeDTO == null)
-            {
                 return BadRequest("Maze data must be set!");
-            }
+            // Handle error if id is sent.
+            if (mazeDTO.Id != null)
+                return BadRequest("No ID should be provided!");
 
             // Map the DTO to entity and save the entity
             Maze createdEntity = _service.Create(mazeDTO.ToEntity());
@@ -66,9 +65,7 @@ namespace MicromouseSimulatorBackend.API.Controllers
         {
             // Handle error if no data is sent.
             if (mazeDTO == null)
-            {
                 return BadRequest("Maze data must be set!");
-            }
 
             try
             {

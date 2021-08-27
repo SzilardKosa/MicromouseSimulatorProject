@@ -1,6 +1,7 @@
 ﻿using MicromouseSimulatorBackend.BLL.Models;
 using MicromouseSimulatorBackend.BLL.RepositoryInterfaces;
 using MicromouseSimulatorBackend.DATA.Config;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -58,6 +59,8 @@ namespace MicromouseSimulatorBackend.DATA.Repository
 
         public virtual TDocument FindById(string id)
         {
+            if (!isValidId(id))
+                return null;
             var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, id);
             return _collection.Find(filter).SingleOrDefault();
         }
@@ -116,6 +119,8 @@ namespace MicromouseSimulatorBackend.DATA.Repository
 
         public void DeleteById(string id)
         {
+            if (!isValidId(id))
+                return;
             var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, id);
             _collection.FindOneAndDelete(filter);
         }
@@ -137,6 +142,11 @@ namespace MicromouseSimulatorBackend.DATA.Repository
         public Task DeleteManyAsync(Expression<Func<TDocument, bool>> filterExpression)
         {
             return Task.Run(() => _collection.DeleteManyAsync(filterExpression));
+        }
+
+        private bool isValidId(string id)
+        {
+            return ObjectId.TryParse(id, out _);
         }
     }
 }

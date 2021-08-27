@@ -1,15 +1,24 @@
 ﻿using MicromouseSimulatorBackend.BLL.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace MicromouseSimulatorBackend.API.DTOs
 {
     public class MazeDTO
     {
         public string Id { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public bool IsFullSize { get; set; }
+        [Required]
+        [Range(1, 32)]
         public int Width { get; set; }
+        [Required]
+        [Range(1, 32)]
         public int Height { get; set; }
-        public string GoalArea { get; set; }
+        [Required]
+        public GoalArea GoalArea { get; set; }
+        [Required]
         public string Walls { get; set; }
 
         // Because of the way JSON Deserialization works (first an object is created, then
