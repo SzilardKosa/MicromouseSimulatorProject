@@ -27,14 +27,14 @@ namespace MicromouseSimulatorBackend.API.Controllers
 
         // Find one simulation by id
         [HttpGet("{id}")]
-        public ActionResult<SimulationDTO> GetSimulation(string id)
+        public ActionResult<SimulationExpandedDTO> GetSimulation(string id)
         {
             var result = _service.FindById(id);
 
             if (result == null)
                 return NotFound();
 
-            return Ok(new SimulationDTO(result));
+            return Ok(new SimulationExpandedDTO(result));
         }
 
         // Create a new simulation

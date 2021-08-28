@@ -20,9 +20,9 @@ namespace MicromouseSimulatorBackend.BLL.Services
             return result;
         }
 
-        public Simulation FindById(string id)
+        public SimulationExpanded FindById(string id)
         {
-            return _simulationRepository.FindById(id);
+            return _simulationRepository.FindByIdAndPopulate(id);
         }
 
         public Simulation Create(Simulation document)

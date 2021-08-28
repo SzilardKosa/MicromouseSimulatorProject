@@ -146,7 +146,7 @@ namespace MicromouseSimulatorBackend.DATA.Repository
             return Task.Run(() => _collection.DeleteManyAsync(filterExpression));
         }
 
-        private bool isValidId(string id)
+        internal bool isValidId(string id)
         {
             return ObjectId.TryParse(id, out _);
         }
