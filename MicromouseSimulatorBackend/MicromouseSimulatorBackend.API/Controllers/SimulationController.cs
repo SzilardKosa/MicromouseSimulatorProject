@@ -82,10 +82,10 @@ namespace MicromouseSimulatorBackend.API.Controllers
                 // According to the conventions, we have to return HTTP 204 No Content.
                 return NoContent();
             }
-            catch (DocumentDoesntExistsException)
+            catch (DocumentDoesntExistsException e)
             {
                 // Handle error if the simulation to update doesn't exists.
-                return BadRequest("No Simulation exists with the given ID!");
+                return BadRequest(e.Message);
             }
         }
 

@@ -49,14 +49,19 @@ namespace MicromouseSimulatorBackend.BLL.Services
             _simulationRepository.InsertOne(simulation);
             return simulation;
         }
-        public void Update(string id, Simulation document)
+        public void Update(string id, Simulation simulation)
         {
             if (_simulationRepository.FindById(id) == null)
-            {
-                throw new DocumentDoesntExistsException();
-            }
-            document.Id = id;
-            _simulationRepository.ReplaceOne(id, document);
+                throw new DocumentDoesntExistsException("No Simulation exists with the given ID!");
+            if (simulation.AlgorithmId != null && _algorithmRepository.FindById(simulation.AlgorithmId) == null)
+                throw new DocumentDoesntExistsException("The given AlgorithmId does not exist!");
+            if (simulation.MazeId != null && _mazeRepository.FindById(simulation.MazeId) == null)
+                throw new DocumentDoesntExistsException("The given MazeId does not exist!");
+            if (simulation.MouseId != null && _mouseRepository.FindById(simulation.MouseId) == null)
+                throw new DocumentDoesntExistsException("The given MouseId does not exist!");
+
+            simulation.Id = id;
+            _simulationRepository.ReplaceOne(id, simulation);
         }
 
         public void Delete(string id)
