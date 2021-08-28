@@ -47,16 +47,23 @@ namespace MicromouseSimulatorBackend.API.Controllers
             // Handle error if id is sent.
             if (simulationDTO.Id != null)
                 return BadRequest("No ID should be provided!");
+            try
+            {
+                // Map the DTO to entity and save the entity
+                Simulation createdEntity = _service.Create(simulationDTO.ToEntity());
 
-            // Map the DTO to entity and save the entity
-            Simulation createdEntity = _service.Create(simulationDTO.ToEntity());
-
-            // According to the conventions, we have to return a HTTP 201 created repsonse, with
-            // field "Location" in the header pointing to the created object
-            return CreatedAtAction(
-                nameof(GetSimulation),
-                new { id = createdEntity.Id },
-                new SimulationDTO(createdEntity));
+                // According to the conventions, we have to return a HTTP 201 created repsonse, with
+                // field "Location" in the header pointing to the created object
+                return CreatedAtAction(
+                    nameof(GetSimulation),
+                    new { id = createdEntity.Id },
+                    new SimulationDTO(createdEntity));
+            }
+            catch (DocumentDoesntExistsException e)
+            {
+                // Handle error if either or the ids doesn't exists.
+                return BadRequest(e.Message);
+            }
         }
 
         // Update an existing simulation

@@ -9,9 +9,21 @@ namespace MicromouseSimulatorBackend.BLL.Services
     public class SimulationService : ISimulationService
     {
         private readonly ISimulationRepository _simulationRepository;
-        public SimulationService(ISimulationRepository simulationRepository)
+        private readonly IBaseRepository<Algorithm> _algorithmRepository;
+        private readonly IBaseRepository<Maze> _mazeRepository;
+        private readonly IBaseRepository<Mouse> _mouseRepository;
+
+        public SimulationService(
+            ISimulationRepository simulationRepository,
+            IBaseRepository<Algorithm> algorithmRepository,
+            IBaseRepository<Maze> mazeRepository,
+            IBaseRepository<Mouse> mouseRepository
+            )
         {
             _simulationRepository = simulationRepository;
+            _algorithmRepository = algorithmRepository;
+            _mazeRepository = mazeRepository;
+            _mouseRepository = mouseRepository;
         }
 
         public IEnumerable<SimulationExpanded> FindAll()
@@ -25,10 +37,17 @@ namespace MicromouseSimulatorBackend.BLL.Services
             return _simulationRepository.FindByIdAndPopulate(id);
         }
 
-        public Simulation Create(Simulation document)
+        public Simulation Create(Simulation simulation)
         {
-            _simulationRepository.InsertOne(document);
-            return document;
+            if (simulation.AlgorithmId != null && _algorithmRepository.FindById(simulation.AlgorithmId) == null)
+                throw new DocumentDoesntExistsException("The given AlgorithmId does not exist!");
+            if (simulation.MazeId != null && _mazeRepository.FindById(simulation.MazeId) == null)
+                throw new DocumentDoesntExistsException("The given MazeId does not exist!");
+            if (simulation.MouseId != null && _mouseRepository.FindById(simulation.MouseId) == null)
+                throw new DocumentDoesntExistsException("The given MouseId does not exist!");
+
+            _simulationRepository.InsertOne(simulation);
+            return simulation;
         }
         public void Update(string id, Simulation document)
         {
