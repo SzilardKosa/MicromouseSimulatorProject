@@ -12,9 +12,12 @@ namespace MicromouseSimulatorBackend.BLL.Models
     {
         public string Name { get; set; }
 
-        public MongoDBRef AlgorithmRef { get; set; }
-        public MongoDBRef MazeRef { get; set; }
-        public MongoDBRef MouseRef { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string AlgorithmId { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string MazeId { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string MouseId { get; set; }
 
         [BsonIgnore]
         public Algorithm Algorithm { get; set; }
