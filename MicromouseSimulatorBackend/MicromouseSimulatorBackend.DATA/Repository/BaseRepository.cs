@@ -11,14 +11,16 @@ using System.Threading.Tasks;
 
 namespace MicromouseSimulatorBackend.DATA.Repository
 {
-    public class MongoRepository<TDocument> : IMongoRepository<TDocument> where TDocument : BaseDocument
+    public class BaseRepository<TDocument> : IBaseRepository<TDocument> where TDocument : BaseDocument
     {
-        private readonly IMongoCollection<TDocument> _collection;
+        internal readonly IMongoCollection<TDocument> _collection;
+        internal readonly IMicromouseDatabaseSettings _settings;
 
-        public MongoRepository(IMicromouseDatabaseSettings settings)
+        public BaseRepository(IMicromouseDatabaseSettings settings)
         {
             var database = new MongoClient(settings.ConnectionString).GetDatabase(settings.DatabaseName);
             _collection = database.GetCollection<TDocument>(GetCollectionName(typeof(TDocument)));
+            _settings = settings;
         }
 
         private protected string GetCollectionName(Type documentType)

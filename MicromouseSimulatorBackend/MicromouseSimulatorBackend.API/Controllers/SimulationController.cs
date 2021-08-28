@@ -20,9 +20,9 @@ namespace MicromouseSimulatorBackend.API.Controllers
 
         // Fetch all simulations
         [HttpGet]
-        public ActionResult<IEnumerable<SimulationDTO>> GetSimulations()
+        public ActionResult<IEnumerable<SimulationExpandedDTO>> GetSimulations()
         {
-            return Ok(_service.FindAll().Select(s => new SimulationDTO(s)));
+            return Ok(_service.FindAll().Select(s => new SimulationExpandedDTO(s)));
         }
 
         // Find one simulation by id

@@ -7,8 +7,7 @@ using System.Linq;
 
 namespace MicromouseSimulatorBackend.BLL.Models
 {
-    [BsonCollection("Simulations")]
-    public class Simulation : BaseDocument
+    public class SimulationExpanded : BaseDocument
     {
         public string Name { get; set; }
 
@@ -18,5 +17,9 @@ namespace MicromouseSimulatorBackend.BLL.Models
         public string MazeId { get; set; }
         [BsonRepresentation(BsonType.ObjectId)]
         public string MouseId { get; set; }
+
+        public Algorithm Algorithm { get; set; }
+        public Maze Maze { get; set; }
+        public Mouse Mouse { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MicromouseSimulatorBackend.BLL.RepositoryInterfaces
 {
-    public interface IMongoRepository<TDocument> where TDocument : BaseDocument
+    public interface IBaseRepository<TDocument> where TDocument : BaseDocument
     {
         IQueryable<TDocument> AsQueryable();
 

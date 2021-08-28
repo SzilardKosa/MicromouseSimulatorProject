@@ -33,7 +33,8 @@ namespace MicromouseSimulatorBackend.API
                 sp.GetRequiredService<IOptions<MicromouseDatabaseSettings>>().Value);
 
             // DB repository
-            services.AddSingleton(typeof(IMongoRepository<>), typeof(MongoRepository<>));
+            services.AddSingleton(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            services.AddSingleton<ISimulationRepository, SimulationRepository>();
 
             // Services
             services.AddScoped<IAlgorithmService, AlgorithmService>();

@@ -6,7 +6,7 @@ namespace MicromouseSimulatorBackend.BLL.Services
 {
     public class AlgorithmService : BaseService<Algorithm>, IAlgorithmService
     {
-        public AlgorithmService(IMongoRepository<Algorithm> algorithmRepository) : base(algorithmRepository)
+        public AlgorithmService(IBaseRepository<Algorithm> algorithmRepository) : base(algorithmRepository)
         {
         }
 

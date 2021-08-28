@@ -8,9 +8,9 @@ namespace MicromouseSimulatorBackend.BLL.Services
 {
     public class BaseService<TDocument> : IBaseService<TDocument> where TDocument : BaseDocument
     {
-        private readonly IMongoRepository<TDocument> _repository;
+        private readonly IBaseRepository<TDocument> _repository;
 
-        public BaseService(IMongoRepository<TDocument> repository)
+        public BaseService(IBaseRepository<TDocument> repository)
         {
             this._repository = repository;
         }

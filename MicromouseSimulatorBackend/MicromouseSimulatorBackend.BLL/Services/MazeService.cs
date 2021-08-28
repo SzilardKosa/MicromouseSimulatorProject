@@ -6,7 +6,7 @@ namespace MicromouseSimulatorBackend.BLL.Services
 {
     public class MazeService : BaseService<Maze>, IMazeService
     {
-        public MazeService(IMongoRepository<Maze> mazeRepository) : base(mazeRepository)
+        public MazeService(IBaseRepository<Maze> mazeRepository) : base(mazeRepository)
         {
         }
 

@@ -6,7 +6,7 @@ namespace MicromouseSimulatorBackend.BLL.Services
 {
     public class MouseService : BaseService<Mouse>, IMouseService
     {
-        public MouseService(IMongoRepository<Mouse> mouseRepository) : base(mouseRepository)
+        public MouseService(IBaseRepository<Mouse> mouseRepository) : base(mouseRepository)
         {
         }
 
