@@ -12,14 +12,14 @@ namespace MicromouseSimulatorBackend.BLL.Services
         private readonly IBaseRepository<Algorithm> _algorithmRepository;
         private readonly IBaseRepository<Maze> _mazeRepository;
         private readonly IBaseRepository<Mouse> _mouseRepository;
-        private readonly IFileService _fileService;
+        private readonly ISimulationFileService _fileService;
 
         public SimulationService(
             ISimulationRepository simulationRepository,
             IBaseRepository<Algorithm> algorithmRepository,
             IBaseRepository<Maze> mazeRepository,
             IBaseRepository<Mouse> mouseRepository,
-            IFileService fileService
+            ISimulationFileService fileService
             )
         {
             _simulationRepository = simulationRepository;

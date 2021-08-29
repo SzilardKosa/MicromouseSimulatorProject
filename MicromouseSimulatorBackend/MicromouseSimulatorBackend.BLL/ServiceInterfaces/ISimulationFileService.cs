@@ -2,7 +2,7 @@
 
 namespace MicromouseSimulatorBackend.BLL.ServiceInterfaces
 {
-    public interface IFileService
+    public interface ISimulationFileService
     {
         void SaveSimulation(SimulationExpanded simulation);
         void DeleteSimulation(string id);

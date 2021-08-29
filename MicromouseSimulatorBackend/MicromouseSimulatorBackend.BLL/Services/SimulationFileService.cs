@@ -6,7 +6,7 @@ using System.Text.Json;
 
 namespace MicromouseSimulatorBackend.BLL.Services
 {
-    public class FileService : IFileService
+    public class SimulationFileService : ISimulationFileService
     {
         private Dictionary<string, string> languageToFileName = new Dictionary<string, string>()
         {
