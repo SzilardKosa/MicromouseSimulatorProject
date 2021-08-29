@@ -10,5 +10,6 @@ namespace MicromouseSimulatorBackend.BLL.ServiceInterfaces
         Simulation Create(Simulation document);
         void Update(string id, Simulation document);
         void Delete(string id);
+        void RunSimulation(string id);
     }
 }

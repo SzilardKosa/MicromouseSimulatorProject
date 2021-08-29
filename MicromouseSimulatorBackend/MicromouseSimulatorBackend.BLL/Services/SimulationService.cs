@@ -12,18 +12,21 @@ namespace MicromouseSimulatorBackend.BLL.Services
         private readonly IBaseRepository<Algorithm> _algorithmRepository;
         private readonly IBaseRepository<Maze> _mazeRepository;
         private readonly IBaseRepository<Mouse> _mouseRepository;
+        private readonly IFileService _fileService;
 
         public SimulationService(
             ISimulationRepository simulationRepository,
             IBaseRepository<Algorithm> algorithmRepository,
             IBaseRepository<Maze> mazeRepository,
-            IBaseRepository<Mouse> mouseRepository
+            IBaseRepository<Mouse> mouseRepository,
+            IFileService fileService
             )
         {
             _simulationRepository = simulationRepository;
             _algorithmRepository = algorithmRepository;
             _mazeRepository = mazeRepository;
             _mouseRepository = mouseRepository;
+            _fileService = fileService;
         }
 
         public IEnumerable<SimulationExpanded> FindAll()
@@ -67,6 +70,23 @@ namespace MicromouseSimulatorBackend.BLL.Services
         public void Delete(string id)
         {
             _simulationRepository.DeleteById(id);
+            // TODO: delete the simulation folder too if it exits
+        }
+
+        public void RunSimulation(string id)
+        {
+            var simulation = _simulationRepository.FindByIdAndPopulate(id);
+            if (simulation == null)
+                throw new DocumentDoesntExistsException("No Simulation exists with the given ID!");
+            if (simulation.Algorithm == null)
+                throw new DocumentDoesntExistsException("The Simulation does not contain any Algorithm!");
+            if (simulation.Maze == null)
+                throw new DocumentDoesntExistsException("The Simulation does not contain any Maze!");
+
+            _fileService.SaveSimulation(simulation);
+
+            // TODO: run the docker container and send back result       
+
         }
     }
 }

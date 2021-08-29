@@ -96,5 +96,24 @@ namespace MicromouseSimulatorBackend.API.Controllers
             // According to the conventions, we have to return HTTP 204 No Content.
             return NoContent();
         }
+
+        // Run Simulation by id and send back the result
+        [HttpGet("{id}/run")]
+        public ActionResult RunSimulation(string id)
+        {
+            try
+            {
+                _service.RunSimulation(id);
+                return NoContent();
+
+                // var result = _service.RunSimulation(id);
+                // return Ok(result);
+            }
+            catch (DocumentDoesntExistsException e)
+            {
+                // Handle error if the simulation to run or its needed parts doesn't exist.
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

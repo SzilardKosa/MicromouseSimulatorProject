@@ -1,13 +1,14 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace MicromouseSimulatorBackend.BLL.Models
 {
     public class GoalArea
     {
-        [Required]
+        [JsonPropertyName("top_left")]
         public Coordinate TopLeft { get; set; }
-        [Required]
+        [JsonPropertyName("bottom_right")]
         public Coordinate BottomRight { get; set; }
     }
 }

@@ -17,7 +17,7 @@ namespace MicromouseSimulatorBackend.API.DTOs
         [Range(1, 32)]
         public int Height { get; set; }
         [Required]
-        public GoalArea GoalArea { get; set; }
+        public GoalAreaDTO GoalArea { get; set; }
         [Required]
         public string Walls { get; set; }
 
@@ -34,7 +34,7 @@ namespace MicromouseSimulatorBackend.API.DTOs
             this.IsFullSize = maze.IsFullSize;
             this.Width = maze.Width;
             this.Height = maze.Height;
-            this.GoalArea = maze.GoalArea;
+            this.GoalArea = new GoalAreaDTO(maze.GoalArea);
             this.Walls = maze.Walls;
         }
 
@@ -47,7 +47,7 @@ namespace MicromouseSimulatorBackend.API.DTOs
                 IsFullSize = this.IsFullSize,
                 Width = this.Width,
                 Height = this.Height,
-                GoalArea = this.GoalArea,
+                GoalArea = this.GoalArea.ToEntity(),
                 Walls = this.Walls
             };
         }
