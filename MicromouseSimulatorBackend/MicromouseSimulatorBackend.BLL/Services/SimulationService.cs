@@ -70,7 +70,8 @@ namespace MicromouseSimulatorBackend.BLL.Services
         public void Delete(string id)
         {
             _simulationRepository.DeleteById(id);
-            // TODO: delete the simulation folder too if it exits
+
+            _fileService.DeleteSimulation(id);
         }
 
         public void RunSimulation(string id)

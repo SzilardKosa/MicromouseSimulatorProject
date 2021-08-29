@@ -15,6 +15,14 @@ namespace MicromouseSimulatorBackend.BLL.Services
             {"Python", "main.py" }
         };
 
+        public void DeleteSimulation(string id)
+        {
+            var currentPath = Directory.GetCurrentDirectory();
+            var folderPath = Path.Combine(currentPath, "Resources", "Simulations", id);
+            if (Directory.Exists(folderPath))
+                Directory.Delete(folderPath, true);
+        }
+
         public void SaveSimulation(SimulationExpanded simulation)
         {
             // create an empty sim folder
