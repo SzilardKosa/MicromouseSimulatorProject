@@ -3,6 +3,7 @@ using MicromouseSimulatorBackend.BLL.RepositoryInterfaces;
 using MicromouseSimulatorBackend.BLL.ServiceInterfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MicromouseSimulatorBackend.BLL.Services
 {
@@ -12,21 +13,24 @@ namespace MicromouseSimulatorBackend.BLL.Services
         private readonly IBaseRepository<Algorithm> _algorithmRepository;
         private readonly IBaseRepository<Maze> _mazeRepository;
         private readonly IBaseRepository<Mouse> _mouseRepository;
-        private readonly ISimulationFileService _fileService;
+        private readonly ISimulationFileService _simulationFileService;
+        private readonly ISimulationDockerService _simulationDockerService;
 
         public SimulationService(
             ISimulationRepository simulationRepository,
             IBaseRepository<Algorithm> algorithmRepository,
             IBaseRepository<Maze> mazeRepository,
             IBaseRepository<Mouse> mouseRepository,
-            ISimulationFileService fileService
+            ISimulationFileService simulationFileService,
+            ISimulationDockerService simulationDockerService
             )
         {
             _simulationRepository = simulationRepository;
             _algorithmRepository = algorithmRepository;
             _mazeRepository = mazeRepository;
             _mouseRepository = mouseRepository;
-            _fileService = fileService;
+            _simulationFileService = simulationFileService;
+            _simulationDockerService = simulationDockerService;
         }
 
         public IEnumerable<SimulationExpanded> FindAll()
@@ -71,10 +75,10 @@ namespace MicromouseSimulatorBackend.BLL.Services
         {
             _simulationRepository.DeleteById(id);
 
-            _fileService.DeleteSimulation(id);
+            _simulationFileService.DeleteById(id);
         }
 
-        public void RunSimulation(string id)
+        public async Task RunSimulationAsync(string id)
         {
             var simulation = _simulationRepository.FindByIdAndPopulate(id);
             if (simulation == null)
@@ -84,10 +88,9 @@ namespace MicromouseSimulatorBackend.BLL.Services
             if (simulation.Maze == null)
                 throw new DocumentDoesntExistsException("The Simulation does not contain any Maze!");
 
-            _fileService.SaveSimulation(simulation);
+            var folderPath = _simulationFileService.Save(simulation);
 
-            // TODO: run the docker container and send back result       
-
+            await _simulationDockerService.RunContainerAsync(simulation, folderPath);
         }
     }
 }

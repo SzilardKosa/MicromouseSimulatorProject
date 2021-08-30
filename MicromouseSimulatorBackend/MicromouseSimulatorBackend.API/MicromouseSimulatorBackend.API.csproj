@@ -13,4 +13,8 @@
     <ProjectReference Include="..\MicromouseSimulatorBackend.DATA\MicromouseSimulatorBackend.DATA.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\Simulations\" />
+  </ItemGroup>
+
 </Project>

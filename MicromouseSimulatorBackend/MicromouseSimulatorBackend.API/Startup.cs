@@ -42,6 +42,7 @@ namespace MicromouseSimulatorBackend.API
             services.AddScoped<IMouseService, MouseService>();
             services.AddScoped<ISimulationService, SimulationService>();
             services.AddScoped<ISimulationFileService, SimulationFileService>();
+            services.AddScoped<ISimulationDockerService, SimulationDockerService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MicromouseSimulatorBackend.API.DTOs;
 using MicromouseSimulatorBackend.BLL.Models;
 using MicromouseSimulatorBackend.BLL.ServiceInterfaces;
@@ -99,11 +100,11 @@ namespace MicromouseSimulatorBackend.API.Controllers
 
         // Run Simulation by id and send back the result
         [HttpGet("{id}/run")]
-        public ActionResult RunSimulation(string id)
+        public async Task<ActionResult> RunSimulationAsync(string id)
         {
             try
             {
-                _service.RunSimulation(id);
+                await _service.RunSimulationAsync(id);
                 return NoContent();
 
                 // var result = _service.RunSimulation(id);

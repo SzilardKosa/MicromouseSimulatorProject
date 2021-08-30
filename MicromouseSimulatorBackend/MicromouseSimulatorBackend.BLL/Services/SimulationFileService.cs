@@ -15,7 +15,7 @@ namespace MicromouseSimulatorBackend.BLL.Services
             {"Python", "main.py" }
         };
 
-        public void DeleteSimulation(string id)
+        public void DeleteById(string id)
         {
             var currentPath = Directory.GetCurrentDirectory();
             var folderPath = Path.Combine(currentPath, "Resources", "Simulations", id);
@@ -23,7 +23,7 @@ namespace MicromouseSimulatorBackend.BLL.Services
                 Directory.Delete(folderPath, true);
         }
 
-        public void SaveSimulation(SimulationExpanded simulation)
+        public string Save(SimulationExpanded simulation)
         {
             // create an empty sim folder
             var currentPath = Directory.GetCurrentDirectory();
@@ -43,6 +43,8 @@ namespace MicromouseSimulatorBackend.BLL.Services
             var mazeFilePath = Path.Combine(folderPath, "maze.json");
             var jsonString = JsonSerializer.Serialize(maze);
             File.WriteAllText(mazeFilePath, jsonString);
+
+            return folderPath;
         }
     }
 }

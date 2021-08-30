@@ -1,5 +1,6 @@
 ﻿using MicromouseSimulatorBackend.BLL.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MicromouseSimulatorBackend.BLL.ServiceInterfaces
 {
@@ -10,6 +11,6 @@ namespace MicromouseSimulatorBackend.BLL.ServiceInterfaces
         Simulation Create(Simulation document);
         void Update(string id, Simulation document);
         void Delete(string id);
-        void RunSimulation(string id);
+        Task RunSimulationAsync(string id);
     }
 }
