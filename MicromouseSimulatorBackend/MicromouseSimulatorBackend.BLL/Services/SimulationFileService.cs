@@ -15,19 +15,10 @@ namespace MicromouseSimulatorBackend.BLL.Services
             {"Python", "main.py" }
         };
 
-        public void DeleteById(string id)
-        {
-            var currentPath = Directory.GetCurrentDirectory();
-            var folderPath = Path.Combine(currentPath, "Resources", "Simulations", id);
-            if (Directory.Exists(folderPath))
-                Directory.Delete(folderPath, true);
-        }
-
         public string Save(SimulationExpanded simulation)
         {
             // create an empty sim folder
-            var currentPath = Directory.GetCurrentDirectory();
-            var folderPath = Path.Combine(currentPath, "Resources", "Simulations", simulation.Id);
+            var folderPath = getFolderPath(simulation.Id);
             if (Directory.Exists(folderPath))
                 Directory.Delete(folderPath, true);
             Directory.CreateDirectory(folderPath);
@@ -45,6 +36,54 @@ namespace MicromouseSimulatorBackend.BLL.Services
             File.WriteAllText(mazeFilePath, jsonString);
 
             return folderPath;
+        }
+
+        public SimulationResult ReadResult(SimulationExpanded simulation)
+        {
+            // read the result.json
+            var folderPath = getFolderPath(simulation.Id);
+            var resultFileName = Path.Combine(folderPath, "result.json");
+            var result = new SimulationResult();
+            if (File.Exists(resultFileName))
+            {
+                string jsonString = File.ReadAllText(resultFileName);
+                result = JsonSerializer.Deserialize<SimulationResult>(jsonString);
+            }
+            else
+            {
+                result.Error = "The simulation stopped with no result! Most probably it timed out!";
+            }
+
+            // read the history and insert inside the list
+            var historyFileName = Path.Combine(folderPath, "history.txt");
+            result.History = new List<string>();
+            if (File.Exists(historyFileName))
+            {
+                var file = new StreamReader(historyFileName);
+                string line;
+                while ((line = file.ReadLine()) != null)
+                {
+                    result.History.Add(line);
+                }
+            }
+
+            // save the current simulation in the result
+            result.Simulation = simulation;
+
+            return result;
+        }
+
+        public void DeleteById(string id)
+        {
+            var folderPath = getFolderPath(id);
+            if (Directory.Exists(folderPath))
+                Directory.Delete(folderPath, true);
+        }
+
+        private string getFolderPath(string id)
+        {
+            var currentPath = Directory.GetCurrentDirectory();
+            return Path.Combine(currentPath, "Resources", "Simulations", id);
         }
     }
 }

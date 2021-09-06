@@ -44,6 +44,13 @@ namespace MicromouseSimulatorBackend.BLL.Services
 
             // Run container
             await client.Containers.StartContainerAsync(response.ID, null);
+
+            // Wait and stop it
+            try
+            {
+                await client.Containers.WaitContainerAsync(response.ID);
+            }
+            catch { } // Container already exited or docker server error
         }
     }
 }

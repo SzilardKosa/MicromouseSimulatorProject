@@ -100,15 +100,12 @@ namespace MicromouseSimulatorBackend.API.Controllers
 
         // Run Simulation by id and send back the result
         [HttpGet("{id}/run")]
-        public async Task<ActionResult> RunSimulationAsync(string id)
+        public async Task<ActionResult<SimulationResultDTO>> RunSimulationAsync(string id)
         {
             try
             {
-                await _service.RunSimulationAsync(id);
-                return NoContent();
-
-                // var result = _service.RunSimulation(id);
-                // return Ok(result);
+                var result = await _service.RunSimulationAsync(id);
+                return Ok(new SimulationResultDTO(result));
             }
             catch (DocumentDoesntExistsException e)
             {
