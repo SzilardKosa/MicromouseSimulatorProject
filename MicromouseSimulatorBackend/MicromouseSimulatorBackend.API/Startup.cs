@@ -25,6 +25,16 @@ namespace MicromouseSimulatorBackend.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Enable cors
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:3000");
+                    });
+            });
+
             // DB settings
             services.Configure<MicromouseDatabaseSettings>(
                 Configuration.GetSection(nameof(MicromouseDatabaseSettings)));
@@ -48,6 +58,7 @@ namespace MicromouseSimulatorBackend.API
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MicromouseSimulatorBackend.API", Version = "v1" });
+                c.AddServer(new OpenApiServer { Url = "http://localhost:58000" });
             });
         }
 
@@ -64,6 +75,8 @@ namespace MicromouseSimulatorBackend.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthorization();
 
