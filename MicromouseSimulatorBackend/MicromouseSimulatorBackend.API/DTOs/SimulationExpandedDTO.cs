@@ -8,6 +8,9 @@ namespace MicromouseSimulatorBackend.API.DTOs
         public string Id { get; set; }
         [Required]
         public string Name { get; set; }
+        public string AlgorithmId { get; set; }
+        public string MazeId { get; set; }
+        public string MouseId { get; set; }
         public AlgorithmDTO Algorithm { get; set; }
         public MazeDTO Maze { get; set; }
         public MouseDTO Mouse { get; set; }
@@ -22,6 +25,9 @@ namespace MicromouseSimulatorBackend.API.DTOs
         {
             this.Id = simulation.Id;
             this.Name = simulation.Name;
+            this.AlgorithmId = simulation.AlgorithmId;
+            this.MazeId = simulation.MazeId;
+            this.MouseId = simulation.MouseId;
             if (simulation.Algorithm != null)
                 this.Algorithm = new AlgorithmDTO(simulation.Algorithm);
             if (simulation.Maze != null)
