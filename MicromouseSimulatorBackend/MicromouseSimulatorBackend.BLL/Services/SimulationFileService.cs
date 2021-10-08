@@ -31,8 +31,9 @@ namespace MicromouseSimulatorBackend.BLL.Services
 
             // save the maze to a file
             var maze = simulation.Maze;
+            var mazeJson = new MazeJson(maze);
             var mazeFilePath = Path.Combine(folderPath, "maze.json");
-            var jsonString = JsonSerializer.Serialize(maze);
+            var jsonString = JsonSerializer.Serialize(mazeJson);
             File.WriteAllText(mazeFilePath, jsonString);
 
             return folderPath;

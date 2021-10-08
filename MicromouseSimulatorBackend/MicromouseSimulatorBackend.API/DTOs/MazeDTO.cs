@@ -1,4 +1,6 @@
 ﻿using MicromouseSimulatorBackend.BLL.Models;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MicromouseSimulatorBackend.API.DTOs
@@ -17,9 +19,9 @@ namespace MicromouseSimulatorBackend.API.DTOs
         [Range(1, 32)]
         public int Height { get; set; }
         [Required]
-        public GoalAreaDTO GoalArea { get; set; }
+        public Tuple<Coordinate, Coordinate> GoalArea { get; set; }
         [Required]
-        public string Walls { get; set; }
+        public List<List<CellWalls>> Walls { get; set; }
 
         // Because of the way JSON Deserialization works (first an object is created, then
         // its properties set), we need a default constructor.
@@ -34,7 +36,7 @@ namespace MicromouseSimulatorBackend.API.DTOs
             this.IsFullSize = maze.IsFullSize;
             this.Width = maze.Width;
             this.Height = maze.Height;
-            this.GoalArea = new GoalAreaDTO(maze.GoalArea);
+            this.GoalArea = maze.GoalArea;
             this.Walls = maze.Walls;
         }
 
@@ -47,7 +49,7 @@ namespace MicromouseSimulatorBackend.API.DTOs
                 IsFullSize = this.IsFullSize,
                 Width = this.Width,
                 Height = this.Height,
-                GoalArea = this.GoalArea.ToEntity(),
+                GoalArea = this.GoalArea,
                 Walls = this.Walls
             };
         }
