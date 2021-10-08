@@ -8,5 +8,11 @@ namespace MicromouseSimulatorBackend.BLL.Models
         public int X { get; set; }
         [JsonPropertyName("y")]
         public int Y { get; set; }
+
+        public Coordinate(int x, int y)
+        {
+            this.X = x;
+            this.Y = y;
+        }
     }
 }

@@ -12,8 +12,12 @@ namespace MicromouseSimulatorBackend.BLL.Models
 
         public GoalArea(Tuple<Coordinate, Coordinate> goalArea)
         {
-            this.TopLeft = goalArea.Item1;
-            this.BottomRight = goalArea.Item2;
+            var topLeftX = Math.Min(goalArea.Item1.X, goalArea.Item2.X);
+            var topLeftY = Math.Max(goalArea.Item1.Y, goalArea.Item2.Y);
+            var bottomRightX = Math.Max(goalArea.Item1.X, goalArea.Item2.X);
+            var bottomRightY = Math.Min(goalArea.Item1.Y, goalArea.Item2.Y);
+            this.TopLeft = new Coordinate(topLeftX, topLeftY);
+            this.BottomRight = new Coordinate(bottomRightX, bottomRightY);
         }
     }
 }
