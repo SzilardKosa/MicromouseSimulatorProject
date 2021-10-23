@@ -4,7 +4,7 @@ using MicromouseSimulatorBackend.DATA.Config;
 using MongoDB.Driver;
 using System.Collections.Generic;
 
-namespace MicromouseSimulatorBackend.DATA.Repository
+namespace MicromouseSimulatorBackend.DATA.Repositories
 {
     public class SimulationRepository : BaseRepository<Simulation>, ISimulationRepository
     {

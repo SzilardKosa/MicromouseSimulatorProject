@@ -9,7 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace MicromouseSimulatorBackend.DATA.Repository
+namespace MicromouseSimulatorBackend.DATA.Repositories
 {
     public class BaseRepository<TDocument> : IBaseRepository<TDocument> where TDocument : BaseDocument
     {

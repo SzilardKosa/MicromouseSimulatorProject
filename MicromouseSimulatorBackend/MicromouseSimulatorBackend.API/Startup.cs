@@ -2,7 +2,7 @@ using MicromouseSimulatorBackend.BLL.RepositoryInterfaces;
 using MicromouseSimulatorBackend.BLL.ServiceInterfaces;
 using MicromouseSimulatorBackend.BLL.Services;
 using MicromouseSimulatorBackend.DATA.Config;
-using MicromouseSimulatorBackend.DATA.Repository;
+using MicromouseSimulatorBackend.DATA.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
