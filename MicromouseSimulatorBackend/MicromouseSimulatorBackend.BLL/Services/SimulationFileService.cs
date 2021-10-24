@@ -1,5 +1,6 @@
 ﻿using MicromouseSimulatorBackend.BLL.Models;
 using MicromouseSimulatorBackend.BLL.ServiceInterfaces;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
@@ -58,14 +59,20 @@ namespace MicromouseSimulatorBackend.BLL.Services
             // read the history and insert inside the list
             var historyFileName = Path.Combine(folderPath, "history.txt");
             result.History = new List<string>();
-            if (File.Exists(historyFileName))
+            try
             {
-                var file = new StreamReader(historyFileName);
-                string line;
-                while ((line = file.ReadLine()) != null)
+                using (var sr = new StreamReader(historyFileName))
                 {
-                    result.History.Add(line);
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        result.History.Add(line);
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
 
             // save the current simulation in the result
