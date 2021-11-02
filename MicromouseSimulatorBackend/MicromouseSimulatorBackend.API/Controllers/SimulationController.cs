@@ -40,7 +40,7 @@ namespace MicromouseSimulatorBackend.API.Controllers
 
         // Create a new simulation
         [HttpPost]
-        public ActionResult<SimulationDTO> CreateNewSimulation(SimulationDTO simulationDTO)
+        public ActionResult<SimulationDTO> CreateNewSimulation(NewSimulationDTO simulationDTO)
         {
             // Handle error if no data is sent.
             if (simulationDTO == null)
@@ -69,7 +69,7 @@ namespace MicromouseSimulatorBackend.API.Controllers
 
         // Update an existing simulation
         [HttpPut("{id}")]
-        public ActionResult UpdateSimulation(string id, SimulationDTO simulationDTO)
+        public ActionResult UpdateSimulation(string id, NewSimulationDTO simulationDTO)
         {
             // Handle error if no data is sent.
             if (simulationDTO == null)

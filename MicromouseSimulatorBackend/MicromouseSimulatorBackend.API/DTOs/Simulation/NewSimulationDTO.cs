@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MicromouseSimulatorBackend.API.DTOs
 {
-    public class SimulationDTO
+    public class NewSimulationDTO
     {
         public string Id { get; set; }
         [Required]
@@ -14,11 +14,11 @@ namespace MicromouseSimulatorBackend.API.DTOs
 
         // Because of the way JSON Deserialization works (first an object is created, then
         // its properties set), we need a default constructor.
-        public SimulationDTO()
+        public NewSimulationDTO()
         {
 
         }
-        public SimulationDTO(Simulation simulation)
+        public NewSimulationDTO(Simulation simulation)
         {
             this.Id = simulation.Id;
             this.Name = simulation.Name;

@@ -39,7 +39,7 @@ namespace MicromouseSimulatorBackend.API.Controllers
 
         // Create a new mouse
         [HttpPost]
-        public ActionResult<MouseDTO> CreateNewMouse(MouseDTO mouseDTO)
+        public ActionResult<MouseDTO> CreateNewMouse(NewMouseDTO mouseDTO)
         {
             // Handle error if no data is sent.
             if (mouseDTO == null)
@@ -61,7 +61,7 @@ namespace MicromouseSimulatorBackend.API.Controllers
 
         // Update an existing mouse
         [HttpPut("{id}")]
-        public ActionResult UpdateMouse(string id, MouseDTO mouseDTO)
+        public ActionResult UpdateMouse(string id, NewMouseDTO mouseDTO)
         {
             // Handle error if no data is sent.
             if (mouseDTO == null)

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MicromouseSimulatorBackend.API.DTOs
 {
-    public class MazeDTO
+    public class NewMazeDTO
     {
         public string Id { get; set; }
         [Required]
@@ -25,11 +25,11 @@ namespace MicromouseSimulatorBackend.API.DTOs
 
         // Because of the way JSON Deserialization works (first an object is created, then
         // its properties set), we need a default constructor.
-        public MazeDTO()
+        public NewMazeDTO()
         {
 
         }
-        public MazeDTO(Maze maze)
+        public NewMazeDTO(Maze maze)
         {
             this.Id = maze.Id;
             this.Name = maze.Name;

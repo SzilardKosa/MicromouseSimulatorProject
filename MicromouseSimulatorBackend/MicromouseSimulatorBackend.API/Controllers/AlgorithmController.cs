@@ -39,7 +39,7 @@ namespace MicromouseSimulatorBackend.API.Controllers
 
         // Create a new algorithm
         [HttpPost]
-        public ActionResult<AlgorithmDTO> CreateNewAlgorithm(AlgorithmDTO algorithmDTO)
+        public ActionResult<AlgorithmDTO> CreateNewAlgorithm(NewAlgorithmDTO algorithmDTO)
         {
             // Handle error if no data is sent.
             if (algorithmDTO == null)
@@ -61,7 +61,7 @@ namespace MicromouseSimulatorBackend.API.Controllers
 
         // Update an existing algorithm
         [HttpPut("{id}")]
-        public ActionResult UpdateAlgorithm(string id, AlgorithmDTO algorithmDTO)
+        public ActionResult UpdateAlgorithm(string id, NewAlgorithmDTO algorithmDTO)
         {
             // Handle error if no data is sent.
             if (algorithmDTO == null)

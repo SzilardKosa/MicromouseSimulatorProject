@@ -39,7 +39,7 @@ namespace MicromouseSimulatorBackend.API.Controllers
 
         // Create a new maze
         [HttpPost]
-        public ActionResult<MazeDTO> CreateNewMaze(MazeDTO mazeDTO)
+        public ActionResult<MazeDTO> CreateNewMaze(NewMazeDTO mazeDTO)
         {
             // Handle error if no data is sent.
             if (mazeDTO == null)
@@ -61,7 +61,7 @@ namespace MicromouseSimulatorBackend.API.Controllers
 
         // Update an existing maze
         [HttpPut("{id}")]
-        public ActionResult UpdateMaze(string id, MazeDTO mazeDTO)
+        public ActionResult UpdateMaze(string id, NewMazeDTO mazeDTO)
         {
             // Handle error if no data is sent.
             if (mazeDTO == null)
