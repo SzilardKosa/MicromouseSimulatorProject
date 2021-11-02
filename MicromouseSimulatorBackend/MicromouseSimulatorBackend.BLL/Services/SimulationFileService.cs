@@ -53,7 +53,7 @@ namespace MicromouseSimulatorBackend.BLL.Services
             }
             else
             {
-                result.Error = "The simulation stopped with no result! Most probably it timed out!";
+                result.Error = "The simulation stopped with no result! This could indicate that the simulation timed out!";
             }
 
             // read the history and insert inside the list
