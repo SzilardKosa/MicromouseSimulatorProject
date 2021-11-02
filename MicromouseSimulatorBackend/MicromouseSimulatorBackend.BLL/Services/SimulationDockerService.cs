@@ -4,6 +4,7 @@ using MicromouseSimulatorBackend.BLL.Models;
 using MicromouseSimulatorBackend.BLL.ServiceInterfaces;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MicromouseSimulatorBackend.BLL.Services
@@ -19,7 +20,6 @@ namespace MicromouseSimulatorBackend.BLL.Services
 
         public async Task RunContainerAsync(SimulationExpanded simulation, string folderPath)
         {
-            // Create container
             DockerClient client = new DockerClientConfiguration().CreateClient();
             var imageName = languageToImageName[simulation.Algorithm.Language];
             var response = await client.Containers.CreateContainerAsync(
@@ -39,18 +39,11 @@ namespace MicromouseSimulatorBackend.BLL.Services
                         },
                         AutoRemove = true,
                     },
-                    StopTimeout = new TimeSpan(0, 0, 30),
                 });
 
-            // Run container
             await client.Containers.StartContainerAsync(response.ID, null);
-
-            // Wait and stop it
-            try
-            {
-                await client.Containers.WaitContainerAsync(response.ID);
-            }
-            catch { } // Container already exited or docker server error
+            Thread.Sleep(30*1000);
+            await client.Containers.StopContainerAsync(response.ID, new ContainerStopParameters {}, CancellationToken.None);
         }
     }
 }
