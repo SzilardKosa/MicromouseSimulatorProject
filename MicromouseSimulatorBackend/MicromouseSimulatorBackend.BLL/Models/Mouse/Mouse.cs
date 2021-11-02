@@ -5,7 +5,10 @@ namespace MicromouseSimulatorBackend.BLL.Models
     public class Mouse : BaseDocument
     {
         public string Name { get; set; }
-        public bool IsFullSize { get; set; }
-        
+        public double Acceleration { get; set; } // m/s/s
+        public double Deceleration { get; set; } // m/s/s
+        public double MaxSpeed { get; set; } // m/s
+        public double TurnTime { get; set; } // s
+
     }
 }

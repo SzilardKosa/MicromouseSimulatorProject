@@ -9,8 +9,14 @@ namespace MicromouseSimulatorBackend.API.DTOs
         [Required]
         public string Name { get; set; }
         [Required]
-        public bool IsFullSize { get; set; }
-     
+        public double Acceleration { get; set; } // m/s/s
+        [Required]
+        public double Deceleration { get; set; } // m/s/s
+        [Required]
+        public double MaxSpeed { get; set; } // m/s
+        [Required]
+        public double TurnTime { get; set; } // s
+
 
         // Because of the way JSON Deserialization works (first an object is created, then
         // its properties set), we need a default constructor.
@@ -22,7 +28,10 @@ namespace MicromouseSimulatorBackend.API.DTOs
         {
             this.Id = mouse.Id;
             this.Name = mouse.Name;
-            this.IsFullSize = mouse.IsFullSize;
+            this.Acceleration = mouse.Acceleration;
+            this.Deceleration = mouse.Deceleration;
+            this.MaxSpeed = mouse.MaxSpeed;
+            this.TurnTime = mouse.TurnTime;
         }
 
         public Mouse ToEntity()
@@ -31,7 +40,10 @@ namespace MicromouseSimulatorBackend.API.DTOs
             {
                 Id = this.Id,
                 Name = this.Name,
-                IsFullSize = this.IsFullSize,
+                Acceleration = this.Acceleration,
+                Deceleration = this.Deceleration,
+                MaxSpeed = this.MaxSpeed,
+                TurnTime = this.TurnTime
             };
         }
     }
