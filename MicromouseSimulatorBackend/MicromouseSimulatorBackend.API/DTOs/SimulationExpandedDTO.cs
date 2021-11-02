@@ -25,15 +25,21 @@ namespace MicromouseSimulatorBackend.API.DTOs
         {
             this.Id = simulation.Id;
             this.Name = simulation.Name;
-            this.AlgorithmId = simulation.AlgorithmId;
-            this.MazeId = simulation.MazeId;
-            this.MouseId = simulation.MouseId;
             if (simulation.Algorithm != null)
+            {
+                this.AlgorithmId = simulation.AlgorithmId;
                 this.Algorithm = new AlgorithmDTO(simulation.Algorithm);
+            }
             if (simulation.Maze != null)
+            {
+                this.MazeId = simulation.MazeId;
                 this.Maze = new MazeDTO(simulation.Maze);
+            }
             if (simulation.Mouse != null)
+            {
+                this.MouseId = simulation.MouseId;
                 this.Mouse = new MouseDTO(simulation.Mouse);
+            }
         }
 
         public SimulationExpanded ToEntity()
