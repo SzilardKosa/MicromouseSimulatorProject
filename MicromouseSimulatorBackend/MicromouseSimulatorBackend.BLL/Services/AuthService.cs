@@ -32,7 +32,7 @@ namespace MicromouseSimulatorBackend.BLL.Services
             var result = await _userManager.CreateAsync(user, newUser.Password);
             if (!result.Succeeded)
             {
-                throw new Exception("User couldn't be created! Error message: " + result.Errors.First().Description);
+                throw new Exception("User couldn't be created! " + result.Errors.First().Description);
             }
         }
 
