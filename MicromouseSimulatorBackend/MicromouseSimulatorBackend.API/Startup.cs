@@ -10,6 +10,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using AspNetCore.Identity.Mongo;
+using AspNetCore.Identity.Mongo.Model;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using MicromouseSimulatorBackend.BLL.Config;
+using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 
 namespace MicromouseSimulatorBackend.API
 {
@@ -25,13 +34,64 @@ namespace MicromouseSimulatorBackend.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Auth Identity config
+            services.AddIdentityMongoDbProvider<MongoUser>(
+                identity =>
+                {
+                    identity.Password = new PasswordOptions
+                    {
+                        RequiredLength = 8,
+                        RequireDigit = true,
+                        RequireLowercase = true,
+                        RequireUppercase = true,
+                        RequireNonAlphanumeric = false,
+                    };
+                    identity.User.RequireUniqueEmail = true;
+                },
+                mongo =>
+                {
+                    mongo.ConnectionString = Configuration.GetConnectionString("MongoDb");
+                });
+
+            // Auth JWT Token
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["JwtSettings:Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSettings:Key"]))
+                };
+            });
+
+            // Default authorization
+            services.AddAuthorization(options =>
+            {
+                options.FallbackPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser()
+                    .Build();
+            });
+
+            // Jwt settings
+            services.Configure<JwtSettings>(
+                Configuration.GetSection(nameof(JwtSettings)));
+
+            services.AddSingleton<IJwtSettings>(sp =>
+                sp.GetRequiredService<IOptions<JwtSettings>>().Value);
+
             // Enable cors
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
+                        builder.WithOrigins("http://localhost:3000")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
                     });
             });
 
@@ -48,6 +108,7 @@ namespace MicromouseSimulatorBackend.API
 
             // Services
             services.AddScoped<IAlgorithmService, AlgorithmService>();
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IMazeService, MazeService>();
             services.AddScoped<IMouseService, MouseService>();
             services.AddScoped<ISimulationService, SimulationService>();
@@ -59,6 +120,36 @@ namespace MicromouseSimulatorBackend.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MicromouseSimulatorBackend.API", Version = "v1" });
                 c.AddServer(new OpenApiServer { Url = "http://localhost:58000" });
+                c.AddSecurityDefinition("Bearer",
+                    new OpenApiSecurityScheme
+                    {
+                        Description = @"JWT Authorization header using the Bearer scheme.
+                                      Enter 'Bearer' [space] and then your token in the text input below.
+                                      Example: 'Bearer 12345abcdef'",
+                        Name = "Authorization",
+                        In = ParameterLocation.Header,
+                        Type = SecuritySchemeType.ApiKey,
+                        Scheme = "Bearer"
+                    });
+                c.AddSecurityRequirement(
+                    new OpenApiSecurityRequirement()
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                    {
+                                        Type = ReferenceType.SecurityScheme,
+                                        Id = "Bearer"
+                                    },
+                                Scheme = "oauth2",
+                                Name = "Bearer",
+                                In = ParameterLocation.Header,
+
+                            },
+                            new List<string>()
+                        }
+                    });
             });
         }
 
@@ -73,11 +164,10 @@ namespace MicromouseSimulatorBackend.API
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseCors();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
