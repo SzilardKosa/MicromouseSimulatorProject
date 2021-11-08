@@ -33,7 +33,7 @@ namespace MicromouseSimulatorBackend.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> Login(Login data)
+        public async Task<ActionResult<AuthToken>> Login(Login data)
         {
             try
             {
