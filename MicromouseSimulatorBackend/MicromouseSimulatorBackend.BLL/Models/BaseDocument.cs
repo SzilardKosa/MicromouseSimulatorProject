@@ -10,5 +10,7 @@ namespace MicromouseSimulatorBackend.BLL.Models
         [BsonRepresentation(BsonType.ObjectId)]
         [JsonIgnore]
         public string Id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string UserId { get; set; }
     }
 }

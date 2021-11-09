@@ -6,11 +6,11 @@ namespace MicromouseSimulatorBackend.BLL.ServiceInterfaces
 {
     public interface ISimulationService
     {
-        IEnumerable<SimulationExpanded> FindAll();
-        SimulationExpanded FindById(string id);
-        Simulation Create(Simulation document);
-        void Update(string id, Simulation document);
-        void Delete(string id);
-        Task<SimulationResult> RunSimulationAsync(string id);
+        IEnumerable<SimulationExpanded> FindAll(string userId);
+        SimulationExpanded FindById(string id, string userId);
+        Simulation Create(Simulation document, string userId);
+        void Update(string id, Simulation document, string userId);
+        void Delete(string id, string userId);
+        Task<SimulationResult> RunSimulationAsync(string id, string userId);
     }
 }

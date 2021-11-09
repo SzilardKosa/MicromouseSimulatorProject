@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using MicromouseSimulatorBackend.API.DTOs;
 using MicromouseSimulatorBackend.BLL.Models;
 using MicromouseSimulatorBackend.BLL.ServiceInterfaces;
@@ -18,18 +19,18 @@ namespace MicromouseSimulatorBackend.API.Controllers
             this._service = service;
         }
 
-        // Fetch all algorithms
         [HttpGet]
         public ActionResult<IEnumerable<AlgorithmDTO>> GetAlgorithms()
         {
-            return Ok(_service.FindAll().Select(a => new AlgorithmDTO(a)));
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return Ok(_service.FindAll(userId).Select(a => new AlgorithmDTO(a)));
         }
 
-        // Find one algorithm by id
         [HttpGet("{id}")]
         public ActionResult<AlgorithmDTO> GetAlgorithm(string id)
         {
-            var result = _service.FindById(id);
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var result = _service.FindById(id, userId);
 
             if (result == null)
                 return NotFound();
@@ -37,47 +38,33 @@ namespace MicromouseSimulatorBackend.API.Controllers
             return Ok(new AlgorithmDTO(result));
         }
 
-        // Create a new algorithm
         [HttpPost]
         public ActionResult<AlgorithmDTO> CreateNewAlgorithm(NewAlgorithmDTO algorithmDTO)
         {
-            // Handle error if no data is sent.
-            if (algorithmDTO == null)
-                return BadRequest("Algorithm data must be set!");
-            // Handle error if id is sent.
             if (algorithmDTO.Id != null)
                 return BadRequest("No ID should be provided!");
 
-            // Map the DTO to entity and save the entity
-            Algorithm createdEntity = _service.Create(algorithmDTO.ToEntity());
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            Algorithm createdEntity = _service.Create(algorithmDTO.ToEntity(), userId);
 
-            // According to the conventions, we have to return a HTTP 201 created repsonse, with
-            // field "Location" in the header pointing to the created object
             return CreatedAtAction(
                 nameof(GetAlgorithm),
                 new { id = createdEntity.Id },
                 new AlgorithmDTO(createdEntity));
         }
 
-        // Update an existing algorithm
         [HttpPut("{id}")]
         public ActionResult UpdateAlgorithm(string id, NewAlgorithmDTO algorithmDTO)
         {
-            // Handle error if no data is sent.
-            if (algorithmDTO == null)
-                return BadRequest("Algorithm data must be set!");
-
             try
             {
-                // Map the DTO to entity and save it
-                _service.Update(id, algorithmDTO.ToEntity());
+                string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                _service.Update(id, algorithmDTO.ToEntity(), userId);
 
-                // According to the conventions, we have to return HTTP 204 No Content.
                 return NoContent();
             }
             catch (DocumentDoesntExistsException)
             {
-                // Handle error if the algorithm to update doesn't exists.
                 return BadRequest("No Algorithm exists with the given ID!");
             }
         }
@@ -85,8 +72,8 @@ namespace MicromouseSimulatorBackend.API.Controllers
         [HttpDelete("{id}")]
         public ActionResult DeleteAlgorithm(string id)
         {
-            _service.Delete(id);
-            // According to the conventions, we have to return HTTP 204 No Content.
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            _service.Delete(id, userId);
             return NoContent();
         }
     }

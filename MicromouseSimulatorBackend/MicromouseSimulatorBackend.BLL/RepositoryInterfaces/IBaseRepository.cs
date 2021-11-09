@@ -49,5 +49,6 @@ namespace MicromouseSimulatorBackend.BLL.RepositoryInterfaces
         void DeleteMany(Expression<Func<TDocument, bool>> filterExpression);
 
         Task DeleteManyAsync(Expression<Func<TDocument, bool>> filterExpression);
+        bool IsValidId(string id);
     }
 }

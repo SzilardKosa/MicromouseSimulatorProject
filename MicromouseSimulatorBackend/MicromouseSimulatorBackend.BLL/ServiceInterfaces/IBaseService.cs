@@ -5,10 +5,10 @@ namespace MicromouseSimulatorBackend.BLL.ServiceInterfaces
 {
     public interface IBaseService<TDocument> where TDocument : BaseDocument
     {
-        IEnumerable<TDocument> FindAll();
-        TDocument FindById(string id);
-        TDocument Create(TDocument document);
-        void Update(string id, TDocument document);
-        void Delete(string id);
+        IEnumerable<TDocument> FindAll(string userId);
+        TDocument FindById(string id, string userId);
+        TDocument Create(TDocument document, string userId);
+        void Update(string id, TDocument document, string userId);
+        void Delete(string id, string userId);
     }
 }

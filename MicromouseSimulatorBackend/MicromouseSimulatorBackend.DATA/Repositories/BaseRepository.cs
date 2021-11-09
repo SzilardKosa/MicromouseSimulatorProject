@@ -61,7 +61,7 @@ namespace MicromouseSimulatorBackend.DATA.Repositories
 
         public virtual TDocument FindById(string id)
         {
-            if (!isValidId(id))
+            if (!IsValidId(id))
                 return null;
             var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, id);
             return _collection.Find(filter).SingleOrDefault();
@@ -121,7 +121,7 @@ namespace MicromouseSimulatorBackend.DATA.Repositories
 
         public void DeleteById(string id)
         {
-            if (!isValidId(id))
+            if (!IsValidId(id))
                 return;
             var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, id);
             _collection.FindOneAndDelete(filter);
@@ -146,7 +146,7 @@ namespace MicromouseSimulatorBackend.DATA.Repositories
             return Task.Run(() => _collection.DeleteManyAsync(filterExpression));
         }
 
-        internal bool isValidId(string id)
+        public bool IsValidId(string id)
         {
             return ObjectId.TryParse(id, out _);
         }

@@ -12,10 +12,12 @@ namespace MicromouseSimulatorBackend.DATA.Repositories
         {
         }
 
-        public IEnumerable<SimulationExpanded> FindAllAndPopulate()
+        public IEnumerable<SimulationExpanded> FindAllAndPopulate(string userId)
         {
+            var filterByUser = Builders<Simulation>.Filter.Eq(doc => doc.UserId, userId);
             return _collection
                 .Aggregate()
+                .Match(filterByUser)
                 .Lookup(foreignCollectionName: _settings.AlgorithmsCollectionName,
                         localField: nameof(SimulationExpanded.AlgorithmId),
                         foreignField: "_id",
@@ -34,13 +36,15 @@ namespace MicromouseSimulatorBackend.DATA.Repositories
                 .ToEnumerable();
         }
 
-        public SimulationExpanded FindByIdAndPopulate(string id)
+        public SimulationExpanded FindByIdAndPopulate(string id, string userId)
         {
-            if (!isValidId(id))
+            if (!IsValidId(id))
                 return null;
-            var filter = Builders<Simulation>.Filter.Eq(doc => doc.Id, id);
+            var filterById = Builders<Simulation>.Filter.Eq(doc => doc.Id, id);
+            var filterByUser = Builders<Simulation>.Filter.Eq(doc => doc.UserId, userId);
             return _collection.Aggregate()
-                .Match(filter)
+                .Match(filterById)
+                .Match(filterByUser)
                 .Lookup(foreignCollectionName: _settings.AlgorithmsCollectionName,
                         localField: nameof(SimulationExpanded.AlgorithmId),
                         foreignField: "_id",

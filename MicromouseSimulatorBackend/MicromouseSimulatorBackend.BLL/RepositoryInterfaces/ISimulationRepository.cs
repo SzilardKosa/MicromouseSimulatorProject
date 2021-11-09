@@ -5,7 +5,7 @@ namespace MicromouseSimulatorBackend.BLL.RepositoryInterfaces
 {
     public interface ISimulationRepository : IBaseRepository<Simulation>
     {
-        IEnumerable<SimulationExpanded> FindAllAndPopulate();
-        SimulationExpanded FindByIdAndPopulate(string id);
+        IEnumerable<SimulationExpanded> FindAllAndPopulate(string userId);
+        SimulationExpanded FindByIdAndPopulate(string id, string userId);
     }
 }

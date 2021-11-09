@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using MicromouseSimulatorBackend.API.DTOs;
 using MicromouseSimulatorBackend.BLL.Models;
@@ -19,18 +20,18 @@ namespace MicromouseSimulatorBackend.API.Controllers
             this._service = service;
         }
 
-        // Fetch all simulations
         [HttpGet]
         public ActionResult<IEnumerable<SimulationExpandedDTO>> GetSimulations()
         {
-            return Ok(_service.FindAll().Select(s => new SimulationExpandedDTO(s)));
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return Ok(_service.FindAll(userId).Select(s => new SimulationExpandedDTO(s)));
         }
 
-        // Find one simulation by id
         [HttpGet("{id}")]
         public ActionResult<SimulationExpandedDTO> GetSimulation(string id)
         {
-            var result = _service.FindById(id);
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var result = _service.FindById(id, userId);
 
             if (result == null)
                 return NotFound();
@@ -38,23 +39,16 @@ namespace MicromouseSimulatorBackend.API.Controllers
             return Ok(new SimulationExpandedDTO(result));
         }
 
-        // Create a new simulation
         [HttpPost]
         public ActionResult<SimulationDTO> CreateNewSimulation(NewSimulationDTO simulationDTO)
         {
-            // Handle error if no data is sent.
-            if (simulationDTO == null)
-                return BadRequest("Simulation data must be set!");
-            // Handle error if id is sent.
             if (simulationDTO.Id != null)
                 return BadRequest("No ID should be provided!");
             try
             {
-                // Map the DTO to entity and save the entity
-                Simulation createdEntity = _service.Create(simulationDTO.ToEntity());
+                string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                Simulation createdEntity = _service.Create(simulationDTO.ToEntity(), userId);
 
-                // According to the conventions, we have to return a HTTP 201 created repsonse, with
-                // field "Location" in the header pointing to the created object
                 return CreatedAtAction(
                     nameof(GetSimulation),
                     new { id = createdEntity.Id },
@@ -62,30 +56,22 @@ namespace MicromouseSimulatorBackend.API.Controllers
             }
             catch (DocumentDoesntExistsException e)
             {
-                // Handle error if either or the ids doesn't exists.
                 return BadRequest(e.Message);
             }
         }
 
-        // Update an existing simulation
         [HttpPut("{id}")]
         public ActionResult UpdateSimulation(string id, NewSimulationDTO simulationDTO)
         {
-            // Handle error if no data is sent.
-            if (simulationDTO == null)
-                return BadRequest("Simulation data must be set!");
-
             try
             {
-                // Map the DTO to entity and save it
-                _service.Update(id, simulationDTO.ToEntity());
+                string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                _service.Update(id, simulationDTO.ToEntity(), userId);
 
-                // According to the conventions, we have to return HTTP 204 No Content.
                 return NoContent();
             }
             catch (DocumentDoesntExistsException e)
             {
-                // Handle error if the simulation to update doesn't exists.
                 return BadRequest(e.Message);
             }
         }
@@ -93,23 +79,22 @@ namespace MicromouseSimulatorBackend.API.Controllers
         [HttpDelete("{id}")]
         public ActionResult DeleteSimulation(string id)
         {
-            _service.Delete(id);
-            // According to the conventions, we have to return HTTP 204 No Content.
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            _service.Delete(id, userId);
             return NoContent();
         }
 
-        // Run Simulation by id and send back the result
         [HttpGet("{id}/run")]
         public async Task<ActionResult<SimulationResultDTO>> RunSimulationAsync(string id)
         {
             try
             {
-                var result = await _service.RunSimulationAsync(id);
+                string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                var result = await _service.RunSimulationAsync(id, userId);
                 return Ok(new SimulationResultDTO(result));
             }
             catch (DocumentDoesntExistsException e)
             {
-                // Handle error if the simulation to run or its needed parts doesn't exist.
                 return BadRequest(e.Message);
             }
         }

@@ -14,34 +14,43 @@ namespace MicromouseSimulatorBackend.BLL.Services
         {
             this._repository = repository;
         }
-        public IEnumerable<TDocument> FindAll()
+
+        public IEnumerable<TDocument> FindAll(string userId)
         {
-            return _repository.FilterBy(TDocument => true).ToList();
+            return _repository.FilterBy(doc => doc.UserId == userId).ToList();
         }
 
-        public TDocument FindById(string id)
+        public TDocument FindById(string id, string userId)
         {
-            return _repository.FindById(id);
+            if (!_repository.IsValidId(id))
+                return null;
+            return _repository.FilterBy(doc => doc.UserId == userId && doc.Id == id).FirstOrDefault();
         }
 
-        public virtual TDocument Create(TDocument document)
+        public virtual TDocument Create(TDocument document, string userId)
         {
+            document.UserId = userId;
             _repository.InsertOne(document);
             return document;
         }
-        public virtual void Update(string id, TDocument document)
+
+        public virtual void Update(string id, TDocument document, string userId)
         {
-            if(_repository.FindById(id) == null)
+            if(FindById(id, userId) == null)
             {
                 throw new DocumentDoesntExistsException();
             }
             document.Id = id;
+            document.UserId = userId;
             _repository.ReplaceOne(id, document);
         }
 
-        public virtual void Delete(string id)
+        public virtual void Delete(string id, string userId)
         {
-            _repository.DeleteById(id);
+            if (FindById(id, userId) != null)
+            {
+                _repository.DeleteById(id);
+            }
         }
 
     }
