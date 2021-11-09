@@ -42,6 +42,12 @@ namespace MicromouseSimulatorBackend.BLL.Services
                 });
 
             await client.Containers.StartContainerAsync(response.ID, null);
+
+            await waitContainerAsync(client, response);
+        }
+
+        private async Task waitContainerAsync(DockerClient client, CreateContainerResponse response)
+        {
             var timeout = 30;
             var hasTimedOut = false;
             while (true)
@@ -51,7 +57,8 @@ namespace MicromouseSimulatorBackend.BLL.Services
                 {
                     var info = await client.Containers.InspectContainerAsync(response.ID, CancellationToken.None);
                     if (!info.State.Running) break;
-                } catch (DockerContainerNotFoundException) { break; }
+                }
+                catch (DockerContainerNotFoundException) { break; }
 
                 timeout -= 1;
                 if (timeout == 0)
@@ -62,7 +69,7 @@ namespace MicromouseSimulatorBackend.BLL.Services
             }
             if (hasTimedOut)
             {
-                await client.Containers.StopContainerAsync(response.ID, new ContainerStopParameters {}, CancellationToken.None);
+                await client.Containers.StopContainerAsync(response.ID, new ContainerStopParameters { }, CancellationToken.None);
             }
         }
     }
