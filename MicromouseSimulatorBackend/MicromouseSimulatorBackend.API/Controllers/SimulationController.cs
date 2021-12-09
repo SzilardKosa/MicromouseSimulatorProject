@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -54,7 +55,7 @@ namespace MicromouseSimulatorBackend.API.Controllers
                     new { id = createdEntity.Id },
                     new SimulationDTO(createdEntity));
             }
-            catch (DocumentDoesntExistsException e)
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
@@ -71,6 +72,10 @@ namespace MicromouseSimulatorBackend.API.Controllers
                 return NoContent();
             }
             catch (DocumentDoesntExistsException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
@@ -94,6 +99,10 @@ namespace MicromouseSimulatorBackend.API.Controllers
                 return Ok(new SimulationResultDTO(result));
             }
             catch (DocumentDoesntExistsException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }

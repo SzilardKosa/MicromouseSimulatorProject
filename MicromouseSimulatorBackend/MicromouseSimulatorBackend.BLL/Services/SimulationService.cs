@@ -1,6 +1,7 @@
 ﻿using MicromouseSimulatorBackend.BLL.Models;
 using MicromouseSimulatorBackend.BLL.RepositoryInterfaces;
 using MicromouseSimulatorBackend.BLL.ServiceInterfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -47,11 +48,11 @@ namespace MicromouseSimulatorBackend.BLL.Services
         public Simulation Create(Simulation simulation, string userId)
         {
             if (simulation.AlgorithmId != null && _algorithmRepository.FindById(simulation.AlgorithmId) == null)
-                throw new DocumentDoesntExistsException("The given AlgorithmId does not exist!");
+                throw new Exception("The given AlgorithmId does not exist!");
             if (simulation.MazeId != null && _mazeRepository.FindById(simulation.MazeId) == null)
-                throw new DocumentDoesntExistsException("The given MazeId does not exist!");
+                throw new Exception("The given MazeId does not exist!");
             if (simulation.MouseId != null && _mouseRepository.FindById(simulation.MouseId) == null)
-                throw new DocumentDoesntExistsException("The given MouseId does not exist!");
+                throw new Exception("The given MouseId does not exist!");
 
             simulation.UserId = userId;
             _simulationRepository.InsertOne(simulation);
@@ -63,11 +64,11 @@ namespace MicromouseSimulatorBackend.BLL.Services
             if (!simulationExists(id, userId))
                 throw new DocumentDoesntExistsException("No Simulation exists with the given ID!");
             if (simulation.AlgorithmId != null && _algorithmRepository.FindById(simulation.AlgorithmId) == null)
-                throw new DocumentDoesntExistsException("The given AlgorithmId does not exist!");
+                throw new Exception("The given AlgorithmId does not exist!");
             if (simulation.MazeId != null && _mazeRepository.FindById(simulation.MazeId) == null)
-                throw new DocumentDoesntExistsException("The given MazeId does not exist!");
+                throw new Exception("The given MazeId does not exist!");
             if (simulation.MouseId != null && _mouseRepository.FindById(simulation.MouseId) == null)
-                throw new DocumentDoesntExistsException("The given MouseId does not exist!");
+                throw new Exception("The given MouseId does not exist!");
 
             simulation.Id = id;
             simulation.UserId = userId;
@@ -89,9 +90,9 @@ namespace MicromouseSimulatorBackend.BLL.Services
             if (simulation == null)
                 throw new DocumentDoesntExistsException("No Simulation exists with the given ID!");
             if (simulation.Algorithm == null)
-                throw new DocumentDoesntExistsException("The Simulation does not contain any Algorithm!");
+                throw new Exception("The Simulation does not contain any Algorithm!");
             if (simulation.Maze == null)
-                throw new DocumentDoesntExistsException("The Simulation does not contain any Maze!");
+                throw new Exception("The Simulation does not contain any Maze!");
 
             var folderPath = _simulationFileService.Save(simulation);
             await _simulationDockerService.RunContainerAsync(simulation, folderPath);

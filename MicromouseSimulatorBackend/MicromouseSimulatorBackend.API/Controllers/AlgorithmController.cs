@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using MicromouseSimulatorBackend.API.DTOs;
@@ -65,7 +66,11 @@ namespace MicromouseSimulatorBackend.API.Controllers
             }
             catch (DocumentDoesntExistsException)
             {
-                return BadRequest("No Algorithm exists with the given ID!");
+                return NotFound("No Algorithm exists with the given ID!");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
             }
         }
 
