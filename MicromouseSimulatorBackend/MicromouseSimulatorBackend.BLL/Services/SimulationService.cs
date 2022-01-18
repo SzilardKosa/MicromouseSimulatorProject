@@ -95,7 +95,14 @@ namespace MicromouseSimulatorBackend.BLL.Services
                 throw new Exception("The Simulation does not contain any Maze!");
 
             var folderPath = _simulationFileService.Save(simulation);
-            await _simulationDockerService.RunContainerAsync(simulation, folderPath);
+            try
+            {
+                await _simulationDockerService.RunContainerAsync(simulation, folderPath);
+            }
+            catch (Exception e)
+            {
+                throw new DockerException(e.Message);
+            }
             return _simulationFileService.ReadResult(simulation);
         }
 

@@ -7,6 +7,7 @@ using MicromouseSimulatorBackend.API.DTOs;
 using MicromouseSimulatorBackend.BLL.Models;
 using MicromouseSimulatorBackend.BLL.ServiceInterfaces;
 using MicromouseSimulatorBackend.BLL.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MicromouseSimulatorBackend.API.Controllers
@@ -101,6 +102,11 @@ namespace MicromouseSimulatorBackend.API.Controllers
             catch (DocumentDoesntExistsException e)
             {
                 return NotFound(e.Message);
+            }
+            catch (DockerException e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "There was a problem with Docker! Message: " + e.Message);
             }
             catch (Exception e)
             {
